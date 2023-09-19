@@ -30,7 +30,7 @@ def turn_off_safe_search(driver):
     except Exception as e:
         print(f"Error turning off SafeSearch: {str(e)}")
 
-def get_image_dimensions(image_url, headers):
+def get_image(image_url, headers):
     try:
         response = requests.head(image_url, headers=headers)
         if response.status_code == 200:
@@ -41,7 +41,7 @@ def get_image_dimensions(image_url, headers):
         pass
     return False
 
-def search_large_images_and_gifs(query, num_jpg_media, num_gif_media, download_path):
+def search_large_images(query, num_jpg_media, num_gif_media, download_path):
     # Initialize the web driver with incognito mode
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--incognito")
@@ -73,7 +73,7 @@ def search_large_images_and_gifs(query, num_jpg_media, num_gif_media, download_p
             if downloaded_count >= num_media:
                 break  # Stop downloading once the desired number is reached
             try:
-                if get_image_dimensions(media_url, headers) and i < num_media:  # Check image dimensions
+                if get_image(media_url, headers) and i < num_media:  # Check image dimensions
                     # Send an HTTP GET request for each media URL
                     response = requests.get(media_url, headers=headers)
                     media_data = response.content
@@ -142,4 +142,4 @@ num_jpg_media_to_fetch = 500  # Set the number of JPG images you want to downloa
 num_gif_media_to_fetch = 0  # Set the number of GIFs you want to download
 download_directory = "downloaded_media"
 
-search_large_images_and_gifs(search_query, num_jpg_media_to_fetch, num_gif_media_to_fetch, download_directory)
+search_large_images(search_query, num_jpg_media_to_fetch, num_gif_media_to_fetch, download_directory)
